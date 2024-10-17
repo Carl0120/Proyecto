@@ -1,13 +1,15 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using BlazorApp.Data;
+using Security.Managers;
+using Security.Models;
 
-namespace BlazorApp.Components.Account;
+namespace Security.Services;
 
-internal sealed class IdentityUserAccessor(
-    UserManager<ApplicationUser> userManager,
+public sealed class IdentityUserAccessor(
+    AppUserManager userManager,
     IdentityRedirectManager redirectManager)
 {
-    public async Task<ApplicationUser> GetRequiredUserAsync(HttpContext context)
+    public async Task<AppUser> GetRequiredUserAsync(HttpContext context)
     {
         var user = await userManager.GetUserAsync(context.User);
 
