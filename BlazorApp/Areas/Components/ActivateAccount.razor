@@ -1,0 +1,61 @@
+@page "/ActivateAccount"
+
+@using System.Text
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using Security.Models
+@using Security.Services;
+@using BlazorApp.Components.Account.Shared
+@using Microsoft.AspNetCore.Components.Web
+@using Radzen.Blazor
+
+@inject UserManager<AppUser> UserManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Confirmacion de Registro</PageTitle>
+
+<h1>Confirmacion de Registro</h1>
+
+<RadzenText TextStyle="TextStyle.H4">Su Cuenta ha sido registrada y esta pendiente a confirmacion,
+    Penganse en contacto con el administrador para que confirme su cuenta</RadzenText>
+
+@if (User != null)
+{
+    <div class="text-center mt-4">
+        <RadzenText TextStyle="TextStyle.Subtitle2">
+            ¿Su cuenta ya ha sido confirmada?
+        </RadzenText>
+        <RadzenLink Path="@("login")" Text="Iniciar sesión" Style="font-weight: bold;"/>
+    </div>
+}
+
+@code {
+    private string? statusMessage;
+
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery] private string? UserId { get; set; }
+
+    [SupplyParameterFromQuery] private string? Code { get; set; }
+    private AppUser? User = null;
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId is null || Code is null)
+        {
+            RedirectManager.RedirectTo("");
+        }
+
+        User = await UserManager.FindByIdAsync(UserId);
+        if (User is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            statusMessage = $"Error No se encuentra al usuario especificado";
+        }
+        else
+        {
+            
+            statusMessage = true ? "Su cuenta ya a sido confirmada" : "Su Cuenta ha sido registrada y esta pendiente a confirmacion,\n    Penganse en contacto con el administrador para que confirme su cuenta";
+        }
+    }
+
+}
