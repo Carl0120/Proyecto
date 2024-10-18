@@ -17,6 +17,7 @@ public static class SecurityModule
 {
     public static void AddModule(IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
         services.AddCascadingAuthenticationState();
         services.AddScoped<IdentityUserAccessor>();
         services.AddScoped<IdentityRedirectManager>();

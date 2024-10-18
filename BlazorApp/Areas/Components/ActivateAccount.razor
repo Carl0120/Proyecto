@@ -21,7 +21,7 @@
 @if (User != null)
 {
     <div class="text-center mt-4">
-        @if (false)
+        @if (idLockedOut)
         {
             <RadzenText TextStyle="TextStyle.Subtitle2">
                 ¿Su cuenta ya ha sido confirmada?
@@ -32,7 +32,7 @@
 }
 
 @code {
-    private string? statusMessage;
+    private string statusMessage = $"Error No se encuentra al usuario especificado";
 
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
@@ -40,6 +40,7 @@
 
     [SupplyParameterFromQuery] private string? Code { get; set; }
     private AppUser? User = null;
+    private bool idLockedOut = true;
     protected override async Task OnInitializedAsync()
     {
         if (UserId is null || Code is null)
@@ -48,15 +49,18 @@
         }
 
         User = await UserManager.FindByIdAsync(UserId);
+        
         if (User is null)
         {
+            idLockedOut = await UserManager.IsLockedOutAsync(User);
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error No se encuentra al usuario especificado";
         }
         else
         {
             
-            statusMessage = true ? "Su cuenta ya a sido confirmada" : "Su Cuenta ha sido registrada y esta pendiente a confirmacion,\n    Penganse en contacto con el administrador para que confirme su cuenta";
+            statusMessage =  idLockedOut ? 
+                "Su Cuenta ha sido registrada y esta pendiente a confirmacion,\n    Penganse en contacto con el administrador para que confirme su cuenta" 
+                :"Su cuenta ya a sido confirmada" ;
         }
     }
 

@@ -41,8 +41,8 @@ public class RegisterViewModel : ComponentBase
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
     
-        var result = await UserManager.CreateAsync(user, Input.Password);
-
+        IdentityResult result = await UserManager.CreateAsync(user, Input.Password);
+            
         if (!result.Succeeded)
         {
             identityErrors = result.Errors;
@@ -53,13 +53,13 @@ public class RegisterViewModel : ComponentBase
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        
         var activateResult = await UserManager.ConfirmEmailAsync(user, code);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("ActivateAccount").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
-        
+
+        await UserManager.SetLockoutEnabledAsync(user, true);
             RedirectManager.RedirectTo(callbackUrl);
     }
 
@@ -69,6 +69,8 @@ public class RegisterViewModel : ComponentBase
         {
             var user = Activator.CreateInstance<AppUser>();
             user.EmailConfirmed = true;
+            user.TwoFactorEnabled = false;
+            
             return user;
         }
         catch
