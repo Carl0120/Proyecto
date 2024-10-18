@@ -1,6 +1,44 @@
-@page "/RegisterView"
-<h3>RegisterView</h3>
+@page "/Register"
+@using Radzen
+@using Radzen.Blazor
+@inherits RegisterViewModel
 
-@code {
-    
-}
+<RadzenCard Style="max-width: 800px; margin: auto; margin-top: 50px;">
+    <RadzenTemplateForm TItem="RegisterModel" Data="@Input" Submit="RegisterUser">
+        <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H4" Class="mb-4">Crear Cuenta</RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" class="rz-p-sm-12">
+
+            <RadzenFormField Text="Nombre Completo" Variant="Variant.Text">
+                <RadzenTextBox @bind-Value="@Input.Name" Name="Name"/>
+            </RadzenFormField>
+            <RadzenFormField Text="Apellidos" Variant="Variant.Text">
+                <RadzenTextBox @bind-Value="@Input.LastName" Name="Name"/>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Nombre de Usuario" Variant="Variant.Text">
+                <RadzenTextBox @bind-Value="@Input.UserName" Name="Name"/>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Correo electrónico" Variant="Variant.Text">
+                <RadzenTextBox @bind-Value="@Input.Email" Name="Email"/>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Contraseña" Variant="Variant.Text">
+                <RadzenPassword @bind-Value="@Input.Password" Name="Password"/>
+            </RadzenFormField>
+            <RadzenFormField Text="Confirme la Contraseña" Variant="Variant.Text">
+                <RadzenPassword @bind-Value="@Input.ConfirmPassword" Name="Password"/>
+            </RadzenFormField>
+
+            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center"  >
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Registrarse" ButtonStyle="ButtonStyle.Primary" Class="w-100 mt-4"/>
+            <div class="text-center mt-4">
+                <RadzenText TextStyle="TextStyle.Subtitle2">
+                    ¿Ya tienes una cuenta?
+                </RadzenText>
+                <RadzenLink Path="login" Text="Iniciar sesión" Style="font-weight: bold;" />
+            </div>
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard>

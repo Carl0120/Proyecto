@@ -1,3 +1,5 @@
+namespace BlazorApp.Areas.Register;
+
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Components;
@@ -9,9 +11,8 @@ using Security.Managers;
 using Security.Models;
 using Security.Services;
 
-namespace BlazorApp.Areas.Register;
 
-public class RegisterViewModel
+public class RegisterViewModel : ComponentBase
 {
    
     [Inject]public AppUserManager UserManager { get; set; }
@@ -28,13 +29,13 @@ public class RegisterViewModel
     
     [Inject] public  IEnumerable<IdentityError>? identityErrors { get; set; }
 
-    [SupplyParameterFromForm] private RegisterModel Input { get; set; } = new();
+    [SupplyParameterFromForm] protected RegisterModel Input { get; set; } = new();
 
     [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-    public async Task RegisterUser(EditContext editContext)
+    public async Task RegisterUser()
     {
         var user = CreateUser();
 

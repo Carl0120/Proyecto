@@ -16,15 +16,17 @@
 
 <h1>Confirmacion de Registro</h1>
 
-<RadzenText TextStyle="TextStyle.H4">Su Cuenta ha sido registrada y esta pendiente a confirmacion,
-    Penganse en contacto con el administrador para que confirme su cuenta</RadzenText>
+<RadzenText TextStyle="TextStyle.H4">@statusMessage</RadzenText>
 
 @if (User != null)
 {
     <div class="text-center mt-4">
-        <RadzenText TextStyle="TextStyle.Subtitle2">
-            ¿Su cuenta ya ha sido confirmada?
-        </RadzenText>
+        @if (false)
+        {
+            <RadzenText TextStyle="TextStyle.Subtitle2">
+                ¿Su cuenta ya ha sido confirmada?
+            </RadzenText>
+        }
         <RadzenLink Path="@("login")" Text="Iniciar sesión" Style="font-weight: bold;"/>
     </div>
 }

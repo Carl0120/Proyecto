@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Security.Models;
 
 namespace BlazorApp.Areas.Register;
 
@@ -19,4 +20,17 @@ public class RegisterModel
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+        
+        public string Name { get; set; }
+    
+        public string LastName { get; set; }
+    
+        public string UserName { get; set; }
+        
+        public string ConfirmedPasword { get; set; }
+    
+        public string RoleId { get; set; }
+    
+        public string WorkAreaId { get; set; }
+        
 }
